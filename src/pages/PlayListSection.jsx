@@ -40,17 +40,16 @@ function PlayListSection() {
                 }
             )
             .then((response) => {
-                const { data } = response.data; // Access the data key
-                const feeds = data.Feeds; // Access the Feeds key within the data object
-                console.log("feeds:", feeds); // Log the feeds array
-
+                const { data } = response.data; 
+                const feeds = data.Feeds; 
+                console.log("feeds:", feeds);
                 if (Array.isArray(feeds) && feeds.length > 0) {
-                    setSelectedPlaylist(feeds); // Update selectedPlaylist with the feeds array
+                    setSelectedPlaylist(feeds); 
                 } else {
                     console.error("No videos found in the selected playlist.");
                     setSelectedPlaylist([]);
                 }
-                onOpen(); // Move this line after setSelectedPlaylist
+                onOpen(); 
             })
             .catch((error) => {
                 console.error("Error fetching videos:", error);
