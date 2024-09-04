@@ -31,7 +31,6 @@ function PlayListSection() {
                     ContentType: [2],
                     IsTagged: false,
                     URL: "",
-                    PlayListId // Pass the PlayListId if required by the API
                 },
                 {
                     headers: {
@@ -41,21 +40,22 @@ function PlayListSection() {
                 }
             )
             .then((response) => {
-                const { post_Ids } = response.data; // Extract post_Ids from the response data
+                const { data } = response.data; // Access the data key
+                const feeds = data.Feeds; // Access the Feeds key within the data object
+                console.log("feeds:", feeds); // Log the feeds array
 
-                if (Array.isArray(post_Ids) && post_Ids.length > 0) {
-                    setSelectedPlaylist(post_Ids); // Store post_Ids in state
+                if (Array.isArray(feeds) && feeds.length > 0) {
+                    setSelectedPlaylist(feeds); // Update selectedPlaylist with the feeds array
                 } else {
                     console.error("No videos found in the selected playlist.");
-                    setSelectedPlaylist([]); // Set an empty array if no videos are found
+                    setSelectedPlaylist([]);
                 }
-                onOpen(); // Open the drawer after setting the playlist
+                onOpen(); // Move this line after setSelectedPlaylist
             })
             .catch((error) => {
                 console.error("Error fetching videos:", error);
             });
     };
-
 
     useEffect(() => {
         axios
@@ -71,6 +71,7 @@ function PlayListSection() {
             )
             .then((response) => {
                 const { data } = response.data;
+                console.log(response.data)
 
                 if (Array.isArray(data) && data.length > 0) {
                     setPlaylists(data);
@@ -131,11 +132,10 @@ function PlayListSection() {
                     <DrawerHeader>Playlist Videos</DrawerHeader>
 
                     <DrawerBody>
-
                         {selectedPlaylist.length > 0 ? (
-                            selectedPlaylist.map((video, index) => (
+                            selectedPlaylist.map((feed, index) => (
                                 <Box key={index} p={4} bg="gray.700" borderRadius="md" mb={4}>
-                                    <Text>{video.title}</Text>
+                                    <Text>{feed.NumberOfLikes}</Text>
                                 </Box>
                             ))
                         ) : (
